@@ -3,13 +3,15 @@
 const AWS = require('aws-sdk');
 const s3 = new AWS.S3();
 
-exports.timeAndDate = (callback) => {
+exports.timeAndDate = (event, context, callback) => {
   const current = new Date();
   const dateString = current.toLocaleString();
 
-  const dateBlob = new Blob([dateString], { type: "text/plain" });
+  const dateBuffer = Buffer.from(dateString);
 
-  const params = { Bucket: 'terraform-20180405020804602800000001', Body: dateBlob }
+  const key = Date.now().toString(); // The key just has to be something unique, so make it a timestamp
+
+  const params = { Bucket: 'terraform-20180405020804602800000001', Key: key, Body: dateBuffer }
 
   s3.upload(params, (err, data) => {
     if (err) console.log(err);
