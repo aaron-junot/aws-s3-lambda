@@ -13,7 +13,7 @@ exports.timeAndDate = (callback) => {
 
   s3.upload(params, (err, data) => {
     if (err) console.log(err);
-  }
+  })
 
   callback(null, "Success");
 }
