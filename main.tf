@@ -58,5 +58,6 @@ resource "aws_lambda_function" "time_and_date_function" {
   function_name   = "timeAndDateFunction"
   role            = "${aws_iam_role.iam_for_lambda.arn}"
   handler         = "exports.timeAndDate"
+  source_code_hash = "${base64sha256(file("timeAndDate.zip"))}"
   runtime         = "nodejs6.10"
 }
