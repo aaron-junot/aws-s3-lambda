@@ -14,8 +14,11 @@ exports.timeAndDate = (event, context, callback) => {
   const params = { Bucket: 'terraform-20180405020804602800000001', Key: key, Body: dateBuffer }
 
   s3.upload(params, (err, data) => {
-    if (err) console.log(err);
+    if (err) {
+      callback(err);
+    }
+    else {
+      callback(null, "Success");
+    }
   })
-
-  callback(null, "Success");
 }
