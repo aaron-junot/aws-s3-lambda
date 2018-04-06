@@ -8,6 +8,31 @@ provider "aws" {
 resource "aws_s3_bucket" "bucket" {
 }
 
+resource "aws_iam_role_policy" "lambda_policy" {
+  name = "lambda_policy"
+  role = "${aws_iam_role.iam_for_lambda.id}"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": ["s3:ListBucket"],
+      "Resource": ["arn:aws:s3:::terraform-20180405020804602800000001"]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:PutObject"
+      ],
+      "Resource": ["arn:aws:s3:::terraform-20180405020804602800000001/*"]
+    }
+  ]
+}
+EOF
+}
+
 resource "aws_iam_role" "iam_for_lambda" {
   name = "iam_for_lambda"
 
@@ -22,18 +47,6 @@ resource "aws_iam_role" "iam_for_lambda" {
       },
       "Effect": "Allow",
       "Sid": ""
-    },
-    {
-      "Effect": "Allow",
-      "Action": ["s3:ListBucket"],
-      "Resource": ["arn:aws:s3:::terraform-20180405020804602800000001"]
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "s3:PutObject"
-      ],
-      "Resource": ["arn:aws:s3:::terraform-20180405020804602800000001/*"]
     }
   ]
 }
