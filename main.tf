@@ -19,14 +19,14 @@ resource "aws_iam_role_policy" "lambda_policy" {
     {
       "Effect": "Allow",
       "Action": ["s3:ListBucket"],
-      "Resource": ["arn:aws:s3:::terraform-20180405020804602800000001"]
+      "Resource": ["${aws_s3_bucket.bucket.arn}"]
     },
     {
       "Effect": "Allow",
       "Action": [
         "s3:PutObject"
       ],
-      "Resource": ["arn:aws:s3:::terraform-20180405020804602800000001/*"]
+      "Resource": ["${aws_s3_bucket.bucket.arn}/*"]
     }
   ]
 }
@@ -60,8 +60,15 @@ resource "aws_lambda_function" "time_and_date_function" {
   handler         = "timeAndDate.timeAndDate"
   source_code_hash = "${base64sha256(file("timeAndDate.zip"))}"
   runtime         = "nodejs6.10"
+
+  environment {
+    variables = {
+      BUCKET = "${aws_s3_bucket.bucket.bucket_domain_name}"
+    }
+  }
 }
 
+/*
 resource "aws_cloudwatch_event_rule" "every_five_minutes" {
     name = "every-five-minutes"
     description = "Fires every five minutes"
@@ -81,3 +88,4 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_time_and_date_functio
     principal = "events.amazonaws.com"
     source_arn = "${aws_cloudwatch_event_rule.every_five_minutes.arn}"
 }
+*/
