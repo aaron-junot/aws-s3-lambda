@@ -11,7 +11,8 @@ exports.timeAndDate = (event, context, callback) => {
 
   const key = Date.now().toString(); // The key just has to be something unique, so make it a timestamp
 
-  const params = { Bucket: 'terraform-20180405020804602800000001', Key: key, Body: dateBuffer }
+  const bucketName = process.env.BUCKET.replace(".s3.amazonaws.com", "");
+  const params = { Bucket: bucketName, Key: key, Body: dateBuffer }
 
   s3.upload(params, (err, data) => {
     if (err) {

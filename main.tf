@@ -68,7 +68,6 @@ resource "aws_lambda_function" "time_and_date_function" {
   }
 }
 
-/*
 resource "aws_cloudwatch_event_rule" "every_five_minutes" {
     name = "every-five-minutes"
     description = "Fires every five minutes"
@@ -88,4 +87,3 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_time_and_date_functio
     principal = "events.amazonaws.com"
     source_arn = "${aws_cloudwatch_event_rule.every_five_minutes.arn}"
 }
-*/
